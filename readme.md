@@ -1,5 +1,3 @@
-content = """
-
 # Library Management System
 
 ## Overview
