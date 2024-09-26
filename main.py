@@ -3,37 +3,67 @@
 from src.library import Library
 from src.book import Book
 
+def print_menu():
+    print("\nLibrary Management System")
+    print("1. Add a book")
+    print("2. Borrow a book")
+    print("3. Return a book")
+    print("4. View available books")
+    print("5. Exit")
+
+def get_book_info():
+    isbn = input("Enter ISBN: ")
+    title = input("Enter title: ")
+    author = input("Enter author: ")
+    year = int(input("Enter publication year: "))
+    return Book(isbn, title, author, year)
+
 def main():
     library = Library()
 
-    # Adding books
-    book1 = Book("1234567890", "The Great Gatsby", "F. Scott Fitzgerald", 1925)
-    book2 = Book("0987654321", "To Kill a Mockingbird", "Harper Lee", 1960)
-    book3 = Book("1122334455", "1984", "George Orwell", 1949)
+    while True:
+        print_menu()
+        choice = input("Enter your choice (1-5): ")
 
-    library.add_book(book1)
-    library.add_book(book2)
-    library.add_book(book3)
+        if choice == '1':
+            try:
+                book = get_book_info()
+                library.add_book(book)
+                print(f"Book '{book.title}' added successfully.")
+            except ValueError as e:
+                print(f"Error: {e}")
 
-    print("Available books:")
-    for book in library.view_available_books():
-        print(book)
+        elif choice == '2':
+            isbn = input("Enter the ISBN of the book you want to borrow: ")
+            try:
+                library.borrow_book(isbn)
+                print("Book borrowed successfully.")
+            except ValueError as e:
+                print(f"Error: {e}")
 
-    # Borrowing a book
-    print("\nBorrowing 'The Great Gatsby'")
-    library.borrow_book("1234567890")
+        elif choice == '3':
+            isbn = input("Enter the ISBN of the book you want to return: ")
+            try:
+                library.return_book(isbn)
+                print("Book returned successfully.")
+            except ValueError as e:
+                print(f"Error: {e}")
 
-    print("\nAvailable books after borrowing:")
-    for book in library.view_available_books():
-        print(book)
+        elif choice == '4':
+            available_books = library.view_available_books()
+            if available_books:
+                print("Available books:")
+                for book in available_books:
+                    print(book)
+            else:
+                print("No books available.")
 
-    # Returning a book
-    print("\nReturning 'The Great Gatsby'")
-    library.return_book("1234567890")
+        elif choice == '5':
+            print("Thank you for using the Library Management System. Goodbye!")
+            break
 
-    print("\nAvailable books after returning:")
-    for book in library.view_available_books():
-        print(book)
+        else:
+            print("Invalid choice. Please try again.")
 
 if __name__ == "__main__":
     main()
